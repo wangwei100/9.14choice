@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demohot.subject.mapper.LessionMapper">
+	<insert id="insert">
+		insert into lession
+		(type,teacher_id,name,remain,max_number,classroom_id)
+		values
+		(#{type},#{teacher_id},#{name},#{remain},#{max_number},#{classroom_id});
+	</insert>
+
+	<delete id="delete">
+		delete from user_lession where user_id=#{user_id} and
+		lession_id=#{lession_id} limit 1;
+	</delete>
+
+	<select id="list" resultType="Lession">
+		select * from lession
+	</select>
+
+	<select id="getByType" resultType="Lession">
+		select * from lession where
+		type = #{type} limit #{offset},#{pageSize}
+	</select>
+	<select id="countByType" resultType="int">
+		select count(*) from lession
+		where
+		type = #{type}
+	</select>
+	<select id="getByUserId" resultType="Lession">
+		select l.* from user_lession
+		ul inner join lession l on l.id = ul.lession_id
+		where ul.user_id =
+		#{user_id}
+		limit #{offset}, #{pageSize}
+	</select>
+
+	<select id="getByTeacherId" resultType="Lession">
+		select l.* from
+		teacher_lession tl inner join lession l on l.id=tl.lessionid where
+		tl.teacher_id=#{teacher};
+	</select>
+
+	<select id="countByUserId" resultType="int">
+		select count(*) from
+		user_lession
+		ul inner join lession l on l.id = ul.lession_id
+		where
+		ul.user_id = #{user_id}
+	</select>
+
+	<select id="getById" resultType="Lession">
+		select * from lession where id =
+		#{id}
+	</select>
+
+	<update id="reduceRemain">
+		update lession set remain = remain-1 where id=#{id}
+		and remain >= 1;
+	</update>
+
+	<update id="addRemain">
+		update lession set remain = remain+1 where id =
+		#{id};
+	</update>
+
+</mapper>
